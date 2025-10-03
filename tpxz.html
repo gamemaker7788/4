@@ -22,32 +22,91 @@
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             width: 100%;
             background: white;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             padding: 30px;
             margin-top: 40px;
+            display: flex;
+            gap: 30px;
         }
         
-        header {
-            text-align: center;
-            margin-bottom: 30px;
+        .sidebar {
+            width: 250px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 80vh;
         }
         
-        h1 {
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .sidebar h2 {
+            font-size: 1.3rem;
             color: #2c3e50;
-            font-size: 2.2rem;
-            margin-bottom: 10px;
         }
         
-        .subtitle {
-            color: #7f8c8d;
-            font-size: 1.1rem;
+        .refresh-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #3498db;
+        }
+        
+        .card-list {
+            list-style: none;
+        }
+        
+        .card-item {
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-item:hover {
+            background: #e8f4fc;
+            border-color: #3498db;
+        }
+        
+        .card-item.active {
+            background: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+        
+        .delete-card {
+            color: #e74c3c;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
         }
         
         .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .editor-area {
             display: flex;
             flex-wrap: wrap;
             gap: 30px;
@@ -66,6 +125,22 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
         }
         
         .control-group {
@@ -112,7 +187,7 @@
         
         .preview-container {
             width: 100%;
-            height: 250px; /* 108:54比例 */
+            height: 250px;
             border: 2px dashed #ddd;
             border-radius: 10px;
             display: flex;
@@ -158,14 +233,14 @@
         }
         
         .guest-name {
-            font-size: 32px; /* 增大人物姓名字体 */
+            font-size: 32px;
             font-weight: bold;
-            color: #d35400; /* 默认颜色 */
+            color: #d35400;
             display: inline-block;
             margin: 0 5px;
             padding: 2px 8px;
             border-radius: 5px;
-            background-color: #fff3e0; /* 添加背景色使其更突出 */
+            background-color: #fff3e0;
         }
         
         .hotel-info {
@@ -179,9 +254,10 @@
             display: flex;
             gap: 15px;
             justify-content: center;
+            flex-wrap: wrap;
         }
         
-        .generate-btn, .download-btn {
+        .generate-btn, .download-btn, .save-btn, .new-card-btn {
             background: #3498db;
             color: white;
             border: none;
@@ -199,12 +275,28 @@
             background: #27ae60;
         }
         
+        .save-btn {
+            background: #9b59b6;
+        }
+        
+        .new-card-btn {
+            background: #f39c12;
+        }
+        
         .generate-btn:hover {
             background: #2980b9;
         }
         
         .download-btn:hover {
             background: #219653;
+        }
+        
+        .save-btn:hover {
+            background: #8e44ad;
+        }
+        
+        .new-card-btn:hover {
+            background: #e67e22;
         }
         
         .ratio-info {
@@ -221,8 +313,114 @@
             font-size: 0.9rem;
         }
         
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 5px;
+            background: #27ae60;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.error {
+            background: #e74c3c;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 400px;
+            max-width: 90%;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+        
+        .modal-body {
+            margin-bottom: 20px;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .modal-btn-primary {
+	color: white;
+	background-color: #C00;
+	border: 2px solid #999;
+        }
+        
+        .modal-btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        @media (max-width: 992px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                max-height: 200px;
+            }
+        }
+        
         @media (max-width: 768px) {
-            .main-content {
+            .editor-area {
                 flex-direction: column;
             }
             
@@ -253,81 +451,124 @@
             .preview-container {
                 height: 200px;
             }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>贵宾接待卡片生成器</h1>
-            <p class="subtitle">&nbsp;</p>
-        </header>
-        
-        <div class="main-content">
-            <div class="controls">
-                <div class="control-group">
-                    <h3>航班信息</h3>
-                    <input type="text" id="flightNumber" placeholder="航班号" value="cz6039">
-                </div>
-                
-                <div class="control-group">
-                    <h3>时间信息</h3>
-                    <input type="text" id="flightTime" placeholder="时间" value="21:20">
-                    <input type="date" id="flightDate" value="2025-10-01">
-                </div>
-                
-                <div class="control-group">
-                    <h3>贵宾信息</h3>
-                    <input type="text" id="guestName" placeholder="贵宾姓名" value="王女士">
-                    <input type="text" id="destination" placeholder="目的地" value="格鲁吉亚">
-                </div>
-                
-                <div class="control-group">
-                    <h3>人物颜色</h3>
-                    <div class="color-picker">
-                        <span>颜色:</span>
-                        <input type="color" id="guestColor" value="#000000">
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <h3>酒店信息</h3>
-                    <input type="text" id="hotelName" placeholder="酒店名称" value="Tbilisi Chambers, Trademark Collection by Wyndham">
-                    <input type="text" id="hotelLocation" placeholder="酒店地点" value="第比利斯">
-                </div>
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>已保存的卡片</h2>
+                <button class="refresh-btn" id="refreshBtn">↻</button>
             </div>
+            <ul class="card-list" id="cardList">
+                <!-- 卡片列表将通过JavaScript动态加载 -->
+            </ul>
+        </div>
+        
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <header>
+                <h1>卡片生成器</h1>
+</header>
             
-            <div class="preview">
-                <h3>预览</h3>
-                <div class="preview-container">
-      <div id="cardPreview">
-                        <div class="flight-info">航班号：<span id="previewFlight">cz6039</span></div>
-                        <div class="time-info">时间：<span id="previewTime">21:20 (2025.10.01)</span></div>
-                        <div class="welcome-text">欢迎" <span id="previewGuest" class="guest-name">王女士</span> "一行贵宾来<span id="previewDestination">格鲁吉亚</span></div>
-                        <div class="hotel-info">Hotel: <span id="previewHotel">Tbilisi Chambers, Trademark Collection by Wyndham</span> <span id="previewLocation">第比利斯</span></div>
+            <div class="editor-area">
+                <div class="controls">
+                    <div class="control-group">
+                        <h3>卡片名称</h3>
+                      <input type="text" id="cardName" placeholder="为卡片命名" value="这是第一张">
+                    </div>
+                    
+                    <div class="control-group">
+                        <h3>航班信息</h3>
+                      <input type="text" id="flightNumber" placeholder="航班号" value="">
+                    </div>
+                    
+                    <div class="control-group">
+                        <h3>时间信息</h3>
+                      <input type="text" id="flightTime" placeholder="时间" value="">
+                      <input type="date" id="flightDate" value="">
+                    </div>
+                    
+                    <div class="control-group">
+                        <h3>贵宾信息</h3>
+                      <input type="text" id="guestName" placeholder="贵宾姓名" value="">
+                      <input type="text" id="destination" placeholder="目的地" value="">
+                    </div>
+                    
+                    <div class="control-group">
+                        <h3>人物颜色</h3>
+                        <div class="color-picker">
+                          <input type="color" id="guestColor" value="#000000">
+                      </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <h3>酒店信息</h3>
+                      <input type="text" id="hotelName" placeholder="酒店名称" value="">
+                      <input type="text" id="hotelLocation" placeholder="酒店地点" value="">
                     </div>
                 </div>
-                <p class="ratio-info">&nbsp;</p>
                 
-                <div class="action-buttons">
-                    <button class="generate-btn" id="generateBtn">
-                        <span>生成卡片</span>
-                    </button>
-                    <button class="download-btn" id="downloadBtn">
-                        <span>下载图片</span>
-                    </button>
+                <div class="preview">
+                    <h3>预览</h3>
+                    <div class="preview-container">
+                        <div id="cardPreview">
+                            <div class="flight-info">航班号：<span id="previewFlight">cz6039</span></div>
+                            <div class="time-info">时间：<span id="previewTime">21:20 (2025.10.01)</span></div>
+                            <div class="welcome-text">欢迎" <span id="previewGuest" class="guest-name">王女士</span> "一行贵宾来<span id="previewDestination">格鲁吉亚</span></div>
+                            <div class="hotel-info">Hotel: <span id="previewHotel">Tbilisi Chambers, Trademark Collection by Wyndham</span> <span id="previewLocation">第比利斯</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="generate-btn" id="generateBtn">
+                            <span>生成卡片</span>
+                        </button>
+                        <button class="download-btn" id="downloadBtn">
+                            <span>下载图片</span>
+                        </button>
+                        <button class="save-btn" id="saveBtn">
+                            <span>保存数据</span>
+                        </button>
+                        <button class="new-card-btn" id="newCardBtn">
+                            <span>新建卡片</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-        
-    <footer>
-            <p>© 2025/10/1 贵卡片生成器</p>
-      </footer>
     </div>
+    
+    <!-- 删除确认模态框 -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">删除卡片</h3>
+                <button class="close-modal" id="closeDeleteModal">×</button>
+            </div>
+            <div class="modal-body">
+                <p>您确定要删除这张卡片吗？真的很久~~~~</p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" id="cancelDelete">谁说我要删除了？</button>
+                <button class="modal-btn modal-btn-primary" id="confirmDelete">我就要删除</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 通知 -->
+    <div id="notification" class="notification"></div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // 获取所有输入元素
+            const cardName = document.getElementById('cardName');
             const flightNumber = document.getElementById('flightNumber');
             const flightTime = document.getElementById('flightTime');
             const flightDate = document.getElementById('flightDate');
@@ -348,6 +589,37 @@
             // 获取按钮
             const generateBtn = document.getElementById('generateBtn');
             const downloadBtn = document.getElementById('downloadBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const newCardBtn = document.getElementById('newCardBtn');
+            const refreshBtn = document.getElementById('refreshBtn');
+            const notification = document.getElementById('notification');
+            
+            // 获取模态框元素
+            const deleteModal = document.getElementById('deleteModal');
+            const closeDeleteModal = document.getElementById('closeDeleteModal');
+            const cancelDelete = document.getElementById('cancelDelete');
+            const confirmDelete = document.getElementById('confirmDelete');
+            
+            // 卡片列表
+            const cardList = document.getElementById('cardList');
+            
+            // 当前选中的卡片ID
+            let currentCardId = null;
+            let cardToDelete = null;
+            
+            // 本地存储的卡片数据
+            let cardsData = JSON.parse(localStorage.getItem('vip_cards')) || [];
+            
+            // 显示通知
+            function showNotification(message, isError = false) {
+                notification.textContent = message;
+                notification.classList.toggle('error', isError);
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
             
             // 格式化日期函数
             function formatDate(dateString) {
@@ -387,7 +659,7 @@
             // 生成卡片
             generateBtn.addEventListener('click', function() {
                 updatePreview();
-                alert('贵宾接待卡片已更新！');
+                showNotification('卡片现在是新的了！');
             });
             
             // 下载图片
@@ -485,7 +757,212 @@
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+                
+                showNotification('图片下载到图库了！');
             });
+            
+            // 加载保存的卡片
+            function loadSavedCards() {
+                try {
+                    // 清空卡片列表
+                    cardList.innerHTML = '';
+                    
+                    if (cardsData.length === 0) {
+                        cardList.innerHTML = '<li style="padding: 15px; text-align: center; color: #7f8c8d;">空空如也~~</li>';
+                        return;
+                    }
+                    
+                    // 添加卡片到列表
+                    cardsData.forEach(card => {
+                        const li = document.createElement('li');
+                        li.className = 'card-item';
+                        li.dataset.id = card.id;
+                        
+                        if (card.id === currentCardId) {
+                            li.classList.add('active');
+                        }
+                        
+                        li.innerHTML = `
+                            <span>${card.card_name || '粗心得没名字'}</span>
+                            <button class="delete-card" data-id="${card.id}">×</button>
+                        `;
+                        
+                        cardList.appendChild(li);
+                        
+                        // 添加点击事件
+                        li.addEventListener('click', function(e) {
+                            // 阻止删除按钮的冒泡
+                            if (e.target.classList.contains('delete-card')) {
+                                return;
+                            }
+                            
+                            // 设置当前选中的卡片
+                            document.querySelectorAll('.card-item').forEach(item => {
+                                item.classList.remove('active');
+                            });
+                            this.classList.add('active');
+                            
+                            currentCardId = card.id;
+                            loadCardData(card);
+                        });
+                        
+                        // 添加删除按钮事件
+                        const deleteBtn = li.querySelector('.delete-card');
+                        deleteBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            cardToDelete = card.id;
+                            deleteModal.classList.add('show');
+                        });
+                    });
+                    
+                } catch (err) {
+                    console.error('加载卡片异常:', err);
+                    showNotification('加载卡片过程中发生错误', true);
+                }
+            }
+            
+            // 加载卡片数据到表单
+            function loadCardData(card) {
+                cardName.value = card.card_name || '';
+                flightNumber.value = card.flight_number || '';
+                flightTime.value = card.flight_time || '';
+                flightDate.value = card.flight_date || '';
+                guestName.value = card.guest_name || '';
+                destination.value = card.destination || '';
+                guestColor.value = card.guest_color || '#000000';
+                hotelName.value = card.hotel_name || '';
+                hotelLocation.value = card.hotel_location || '';
+                
+                updatePreview();
+                showNotification(`加载了: ${card.card_name || '未命名卡片'}`);
+            }
+            
+            // 保存数据到本地存储
+            saveBtn.addEventListener('click', function() {
+                try {
+                    // 收集表单数据
+                    const cardData = {
+                        id: currentCardId || Date.now().toString(),
+                        card_name: cardName.value || `卡片-${new Date().toLocaleString()}`,
+                        flight_number: flightNumber.value || '',
+                        flight_time: flightTime.value || '',
+                        flight_date: flightDate.value || '',
+                        guest_name: guestName.value || '',
+                        destination: destination.value || '',
+                        guest_color: guestColor.value || '#000000',
+                        hotel_name: hotelName.value || '',
+                        hotel_location: hotelLocation.value || '',
+                        created_at: new Date().toISOString()
+                    };
+                    
+                    if (currentCardId) {
+                        // 更新现有卡片
+                        const index = cardsData.findIndex(card => card.id === currentCardId);
+                        if (index !== -1) {
+                            cardsData[index] = cardData;
+                        }
+                    } else {
+                        // 插入新卡片
+                        cardsData.unshift(cardData);
+                        currentCardId = cardData.id;
+                    }
+                    
+                    // 保存到本地存储
+                    localStorage.setItem('vip_cards', JSON.stringify(cardsData));
+                    
+                    showNotification('数据保存到数据库！');
+                    
+                    // 重新加载卡片列表
+                    loadSavedCards();
+                    
+                } catch (err) {
+                    console.error('保存异常:', err);
+                    showNotification('保存过程中发生错误', true);
+                }
+            });
+            
+            // 新建卡片
+            newCardBtn.addEventListener('click', function() {
+                // 清空表单
+                cardName.value = '';
+                flightNumber.value = '';
+                flightTime.value = '';
+                flightDate.value = '';
+                guestName.value = '';
+                destination.value = '';
+                guestColor.value = '#000000';
+                hotelName.value = '';
+                hotelLocation.value = '';
+                
+                currentCardId = null;
+                
+                // 取消选中状态
+                document.querySelectorAll('.card-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                updatePreview();
+                showNotification('一个新卡片，开始填写信息吧');
+            });
+            
+            // 刷新卡片列表
+            refreshBtn.addEventListener('click', function() {
+                loadSavedCards();
+                showNotification('卡片列表已刷新');
+            });
+            
+            // 删除卡片
+            confirmDelete.addEventListener('click', function() {
+                try {
+                    // 从数组中删除
+                    cardsData = cardsData.filter(card => card.id !== cardToDelete);
+                    
+                    // 更新本地存储
+                    localStorage.setItem('vip_cards', JSON.stringify(cardsData));
+                    
+                    showNotification('卡片被删除');
+                    
+                    if (currentCardId === cardToDelete) {
+                        currentCardId = null;
+                        // 清空表单
+                        cardName.value = '';
+                        flightNumber.value = '';
+                        flightTime.value = '';
+                        flightDate.value = '';
+                        guestName.value = '';
+                        destination.value = '';
+                        guestColor.value = '#000000';
+                        hotelName.value = '';
+                        hotelLocation.value = '';
+                        updatePreview();
+                    }
+                    
+                    // 重新加载卡片列表
+                    loadSavedCards();
+                    
+                } catch (err) {
+                    console.error('删除异常:', err);
+                    showNotification('删除过程中发生错误', true);
+                } finally {
+                    deleteModal.classList.remove('show');
+                    cardToDelete = null;
+                }
+            });
+            
+            // 关闭删除模态框
+            closeDeleteModal.addEventListener('click', function() {
+                deleteModal.classList.remove('show');
+                cardToDelete = null;
+            });
+            
+            cancelDelete.addEventListener('click', function() {
+                deleteModal.classList.remove('show');
+                cardToDelete = null;
+            });
+            
+            // 初始化加载卡片列表
+            loadSavedCards();
+            showNotification('又来了？欢迎，你知道怎么用吧');
         });
     </script>
 </body>
